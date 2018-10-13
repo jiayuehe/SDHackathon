@@ -47,9 +47,9 @@ public class TravelSalesMan {
  Following code are for part 3
  */
 
-    static ArrayList<Double> generatePossibility(ArrayList<Pair<Integer,Integer>> difference){
+    private static ArrayList<Double> generatePossibility(ArrayList<Pair<Integer, Integer>> difference){
         // sort the list in ascending order
-        Collections.sort(difference, Comparator.comparingInt(Pair::getValue));
+        difference.sort(Comparator.comparingInt(Pair::getValue));
 
 
         List<Double> probabilityV = new ArrayList<>();
@@ -83,22 +83,21 @@ public class TravelSalesMan {
         System.out.println("Current totalNumber is " + totalNumber);
 
         ArrayList<Double> normalizedVector = new ArrayList<>();
-        for(int i = 0; i < probabilityV.size(); i++){
-            normalizedVector.add(probabilityV.get(i)/totalNumber);
+        for (Double aProbabilityV : probabilityV) {
+            normalizedVector.add(aProbabilityV / totalNumber);
         }
         System.out.println("After Normalization, Current probability V is " + normalizedVector);
         return normalizedVector;
     }
 
-    static List<Pair<Integer,Integer>> constructPairs(List<Double> probability){
+    private static List<Pair<Integer,Integer>> constructPairs(List<Double> probability){
         List<Pair<Integer, Integer>> generationPair = new ArrayList<>();
         List<Double> cumulatedVector = new ArrayList<>();
         double counter = 0;
 
         // construct a cumulative
-        for(int i = 0; i < probability.size(); i++)
-        {
-            double currentProb = probability.get(i);
+        for (Double aProbability : probability) {
+            double currentProb = aProbability;
             counter += currentProb;
             System.out.println("Current Counter is " + counter);
             cumulatedVector.add(counter);
@@ -138,7 +137,7 @@ public class TravelSalesMan {
  Following functions are for part 4
  */
 
-    static List<Integer> createChild(int parentA, int parentB, List<List<Integer>> populationMember, int crossIndex)
+    private static List<Integer> createChild(int parentA, int parentB, List<List<Integer>> populationMember, int crossIndex)
     {
         List<Integer> secondGeneration = new ArrayList<>();
         for(int i =0; i < crossIndex + 1; i++){
@@ -154,7 +153,7 @@ public class TravelSalesMan {
         return secondGeneration;
     }
 
-    static void permutationCheck(List<Integer> secondGeneration){
+    private static void permutationCheck(List<Integer> secondGeneration){
         Random rand = new Random();
         int indexOne = rand.nextInt(secondGeneration.size()-2) +1;
         int indexTwo = rand.nextInt(secondGeneration.size()-2) +1;
@@ -190,7 +189,7 @@ public class TravelSalesMan {
     }
 
 
-    static List<List<Integer>> crossOverAll(List<Pair<Integer, Integer>> allParents, List<List<Integer>> allGeneration, double mutationChance){
+    private static List<List<Integer>> crossOverAll(List<Pair<Integer, Integer>> allParents, List<List<Integer>> allGeneration, double mutationChance){
         List<List<Integer>> secondGeneration = new ArrayList<>();
         for(int i = 0; i < allParents.size(); i++){
            secondGeneration.add(crossOver(allParents.get(i),allGeneration,mutationChance));
@@ -202,7 +201,7 @@ public class TravelSalesMan {
     /*
     Following is for part 2
      */
-    static ArrayList<Pair<Integer, Integer>> calculateFitness(List<List<Integer>> allPopulation, List<Location> allLocation) {
+    private static ArrayList<Pair<Integer, Integer>> calculateFitness(List<List<Integer>> allPopulation, List<Location> allLocation) {
         ArrayList<Pair<Integer, Integer>> allFitness = new ArrayList<>();
         for(int i = 0; i < allPopulation.size(); i++){
             List<Integer> currentRoute = allPopulation.get(i);
@@ -237,7 +236,7 @@ public class TravelSalesMan {
     /*
     Following is for part one
      */
-    static void initialPopulation(int population, int allCities, List<List<Integer>> currentFile) {
+    private static void initialPopulation(int population, int allCities, List<List<Integer>> currentFile) {
         List<Integer> currentList = new ArrayList<>();
         for (int j = 0; j < allCities; j++) {
             currentList.add(j);
@@ -266,7 +265,7 @@ public class TravelSalesMan {
     }
     */
 
-    static void processCommand(List<Location> allLocation) {
+    private static void processCommand(List<Location> allLocation) {
         int population = allLocation.size();
         int generation = 8;
 
