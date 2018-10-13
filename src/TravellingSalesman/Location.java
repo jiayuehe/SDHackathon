@@ -4,13 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Location {
+    String currentLoc;
     double lon;
     double lat;
-    Map<Location, Integer> mapOfLocation;
+    Map<String, Integer> mapOfLocation;
 
-    public Location(double longitude, double latitude){
+    public Location(double longitude, double latitude, String name){
         lon = longitude;
         lat = latitude;
+        currentLoc = name;
+    }
+
+    public String getCurrentLoc() {
+        return currentLoc;
     }
 
     public void addLocation(Location k, int price){
@@ -18,7 +24,7 @@ public class Location {
             mapOfLocation = new HashMap<>();
         }
 
-        mapOfLocation.put(k,price);
+        mapOfLocation.put(k.currentLoc,price);
     }
 
 

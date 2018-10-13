@@ -2,47 +2,9 @@ package TravellingSalesman;
 
 import javafx.util.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class TravelSalesMan {
-    /*
-    std::vector<Location> readInLocation(std::ifstream& inputFile){
-        std::vector<Location> allLocation;
-        Location currentLocation;
-        while (static_cast<bool>(getline(inputFile,currentLocation.mName,','))) {
-            std::string tempString;
-            getline(inputFile,tempString,',');
-            currentLocation.mLatitude = std::stod(tempString);
-            getline(inputFile,tempString);
-            currentLocation.mLongitude = stod(tempString);
-            allLocation.push_back(currentLocation);
-        }
-        return allLocation;
-    }
-
-    void outputPopulation(std::ofstream& ostream, Population population, int popSize){
-        ostream << "INITIAL POPULATION:" << std::endl;
-        for(int i = 0; i < popSize; i++)
-        {
-            bool firstTime = true;
-            for(auto& j: population.mMembers[i])
-            {
-                if(firstTime){
-                    ostream << static_cast<int>(j);
-                    firstTime = false;
-                } else{
-                    ostream << "," <<  static_cast<int>(j);
-                }
-            }
-            ostream << std::endl;
-        }
-    }
-*/
-
-
     /*
      Part Two
      */
@@ -79,249 +41,205 @@ public class TravelSalesMan {
         });
     }
 
-    void outputFitness(std::ofstream& ostream, std::vector<std::pair<int,double>> difference){
-        ostream << "FITNESS:" << std::endl;
-        for(auto& i: difference){
-            ostream << i.first << ":" << i.second << std::endl;
-        }
 
-    }
 
 /*
  Following code are for part 3
  */
-/*
-    auto compare = [](std::pair<int, double> pairA, std::pair<int,double> pairB){
-        return pairA.second < pairB.second;
-    };
 
-    std::vector<double> generatePossibility(std::vector<std::pair<int,double>> difference){
+    static ArrayList<Double> generatePossibility(ArrayList<Pair<Integer,Integer>> difference){
         // sort the list in ascending order
-        std::sort(difference.begin(),difference.end(),compare);
-
-        // generate the vector of probabilities
-        std::vector<double> probablityV(difference.size());
-
-        std::generate(probablityV.begin(), probablityV.end(), [&probablityV](){
-            return 1.0/(probablityV.size());
-        });
+        Collections.sort(difference, Comparator.comparingInt(Pair::getValue));
 
 
+        List<Double> probabilityV = new ArrayList<>();
+        for(int i = 0; i  < difference.size(); i++){
+            probabilityV.add(1.0/(difference.size()));
+        }
+
+        System.out.println("Current probability V is " + probabilityV);
         // Multiply the first two by 6
-        probablityV[difference[0].first] *= 6;
-        probablityV[difference[1].first] *= 6;
+        int index = difference.get(0).getKey();
+        probabilityV.set(index, probabilityV.get(index) * 6);
+        index = difference.get(1).getKey();
+        probabilityV.set(index, probabilityV.get(index) * 6);
 
         int firstHalf = difference.size()/2;
 
         // Multiply the first half by 3
         if(firstHalf > 2){
-            std::vector<double> dontmatter;
-            std::transform(difference.begin() + 2, difference.begin()+firstHalf, std::back_inserter(dontmatter), [&probablityV](std::pair<int, double> pair){
-                probablityV[pair.first] *= 3;
-                return pair.second;
-            });
+            for(int i = 2; i < firstHalf; i++){
+                index = difference.get(i).getKey();
+                probabilityV.set(index, probabilityV.get(index) * 3);
+            }
         }
+        System.out.println("After Multiplication Current probability V is " + probabilityV);
+        double totalNumber = 0;
 
-        double totalNumber = std::accumulate(probablityV.begin(),probablityV.end(),0.0);
-        std::vector<double> normalizedVector;
-        std::transform(probablityV.begin(), probablityV.end(), std::back_inserter(normalizedVector), [&totalNumber](float probability){
-            return probability/totalNumber;
-        });
+        for(double currentProb: probabilityV){
+            System.out.print(currentProb + "+");
+            totalNumber += currentProb;
+        }
+        System.out.println("Current totalNumber is " + totalNumber);
 
+        ArrayList<Double> normalizedVector = new ArrayList<>();
+        for(int i = 0; i < probabilityV.size(); i++){
+            normalizedVector.add(probabilityV.get(i)/totalNumber);
+        }
+        System.out.println("After Normalization, Current probability V is " + normalizedVector);
         return normalizedVector;
-
     }
 
-    void constructPairArray(const std::vector<double>& cumulatedVector, bool firstControl,double rand, std::vector<int>& finalArray, int index)
-    {
-        std::transform(cumulatedVector.begin(), cumulatedVector.end(), std::back_inserter(finalArray),[&firstControl, rand, &index](double i){
-        int ip = index;
-        if((rand < i) && firstControl){
-            firstControl = false;
-            ip = index;
-        }
-        else{
-            index ++;
-            ip = 0;
-
-        }
-
-        return ip;
-
-    });
-
-    }
-/*
-    std::vector<std::pair<int, int>> constructPairs(std::vector<double> probability,std::mt19937& mtrand){
-        std::vector<std::pair<int, int>> generationPair(probability.size());
-        std::vector<double> cumulatedVector;
+    static List<Pair<Integer,Integer>> constructPairs(List<Double> probability){
+        List<Pair<Integer, Integer>> generationPair = new ArrayList<>();
+        List<Double> cumulatedVector = new ArrayList<>();
         double counter = 0;
 
         // construct a cumulative
-        std::transform(probability.begin(),probability.end(), std::back_inserter(cumulatedVector),[&probability, &counter](double currentProb){
+        for(int i = 0; i < probability.size(); i++)
+        {
+            double currentProb = probability.get(i);
             counter += currentProb;
-            return counter;
-        });
+            System.out.println("Current Counter is " + counter);
+            cumulatedVector.add(counter);
+        }
+
+        System.out.println("Current Cumulative Probability Vector is " + cumulatedVector);
 
         // generate the pairs
+        for(int i = 0; i < probability.size(); i++){
+            double randomGeneratorOne = Math.random();
+            double randomGeneratorTwo = Math.random();
 
-        std::generate(generationPair.begin(), generationPair.end(),[&cumulatedVector, &mtrand](){
-            std::uniform_real_distribution<double> myDist(0,1);
-            double randomGenerateOne = myDist(mtrand);
-            std::vector<int> finalArray;
+            System.out.println("Parent one is " + randomGeneratorOne + "Parent two is " + randomGeneratorTwo);
+            int parentA = -1;
+            int parentB = -1;
+            for(int j = 0; j < cumulatedVector.size();j++){
+                if(cumulatedVector.get(j) > randomGeneratorTwo){
+                    parentB = j;
+                    break;
+                }
+            }
 
-
-            constructPairArray(cumulatedVector,true,randomGenerateOne, finalArray, 0);
-            double randomGenerateTwo = myDist(mtrand);
-            constructPairArray(cumulatedVector,true,randomGenerateTwo, finalArray, 0);
-
-            std::vector<int> pairArray(finalArray.size());
-            int half = finalArray.size()/2;
-            std::copy_if (finalArray.begin(), finalArray.begin()+half, pairArray.begin(), [](int i){return!(i==0);
-            });
-
-            std::copy_if (finalArray.begin()+half, finalArray.end(), pairArray.begin()+1, [](int i){return!(i==0);
-            });
-
-            std::pair<int, int> newPair(pairArray[0],pairArray[1]);
-            return newPair;
-        });
+            for(int j = 0; j < cumulatedVector.size();j++){
+                if(cumulatedVector.get(j) > randomGeneratorOne){
+                    parentA = j;
+                    break;
+                }
+            }
+            Pair<Integer, Integer> newPair = new Pair<>(parentA, parentB);
+            generationPair.add(newPair);
+        }
 
         return generationPair;
     }
 
 /*
-    void outputPairs(std::ofstream& ostream, std::vector<std::pair<int,int>> allGeneratedPair){
-        ostream << "SELECTED PAIRS:" << std::endl;
-        for(auto& pair:allGeneratedPair){
-            ostream << "(" << pair.first << "," << pair.second << ")" << std::endl;
-        }
-    }
-
-/*
  Following functions are for part 4
  */
-/*
-    std::vector<int> createChild(int parentA, int parentB, std::vector<std::vector<int>> populationMember, int crossIndex)
+
+    static List<Integer> createChild(int parentA, int parentB, List<List<Integer>> populationMember, int crossIndex)
     {
+        List<Integer> secondGeneration = new ArrayList<>();
+        for(int i =0; i < crossIndex + 1; i++){
+            secondGeneration.add(populationMember.get(parentA).get(i));
+        }
 
-        std::vector<int> secondGeneration;
-        std::copy_n(populationMember[parentA].begin(), crossIndex + 1, std::back_inserter(secondGeneration));
-
-
-        std::copy_if(populationMember[parentB].begin(), populationMember[parentB].end(), std::back_inserter(secondGeneration), [&secondGeneration](int currentMember){
-        return std::find(secondGeneration.begin(), secondGeneration.end(), currentMember) == secondGeneration.end();
-
-    });
-
+        for(int i = 0; i < populationMember.get(parentB).size(); i++){
+            if(!secondGeneration.contains(populationMember.get(parentB).get(i))){
+                secondGeneration.add(populationMember.get(parentB).get(i));
+            }
+        }
 
         return secondGeneration;
     }
 
-    void permutationCheck(std::vector<int>& secondGeneration, std::mt19937& mtrand){
-        std::uniform_int_distribution<int> myUniform(1,secondGeneration.size()-1);
-        int indexOne = myUniform(mtrand);
-        int indexTwo = myUniform(mtrand);
-        std::swap(secondGeneration[indexOne], secondGeneration[indexTwo]);
+    static void permutationCheck(List<Integer> secondGeneration){
+        Random rand = new Random();
+        int indexOne = rand.nextInt(secondGeneration.size()-2) +1;
+        int indexTwo = rand.nextInt(secondGeneration.size()-2) +1;
+
+        int temp = secondGeneration.get(indexOne);
+        secondGeneration.set(indexOne, secondGeneration.get(indexTwo));
+        secondGeneration.set(indexTwo,temp);
     }
 
-    std::vector<int> crossOver(std::mt19937& mtrand, std::pair<int, int> currentPair,std::vector<std::vector<int>> populationMember,double mutationChance){
-        int size = populationMember[0].size();
-        std::uniform_int_distribution<int> myUniform(1,size-2);
-        int crossIndex = myUniform(mtrand);
+    static List<Integer> crossOver(Pair<Integer,Integer> currentPair, List<List<Integer>> populationMember,double mutationChance){
+        int size = populationMember.get(0).size();
+        Random rnd = new Random();
+        int crossIndex = rnd.nextInt(size - 2) + 1;
 
-        std::uniform_int_distribution<int> anotherUniform(0,1);
-        int parentDecide = anotherUniform(mtrand);
-        std::vector<int> secondGeneration;
+        //std::uniform_int_distribution<int> anotherUniform(0,1);
+        int parentDecide = rnd.nextInt(1);
+        List<Integer> secondGeneration;
         if(parentDecide == 1){
-            secondGeneration = createChild(currentPair.first, currentPair.second, populationMember, crossIndex);
+            secondGeneration = createChild(currentPair.getKey(), currentPair.getValue(), populationMember, crossIndex);
         } else{
-            secondGeneration =  createChild(currentPair.second, currentPair.first, populationMember, crossIndex);
+            secondGeneration =  createChild(currentPair.getValue(), currentPair.getKey(), populationMember, crossIndex);
         }
 
-        std::uniform_real_distribution<double> mutation(0,1);
-        double currentValue = mutation(mtrand);
+        double currentValue = Math.random();
+        //std::uniform_real_distribution<double> mutation(0,1);
+        //double currentValue = mutation(mtrand);
         // permutation check
         if(currentValue <= mutationChance){
-            permutationCheck(secondGeneration, mtrand);
+            permutationCheck(secondGeneration);
         }
 
         return secondGeneration;
     }
 
 
-    std::vector<std::vector<int>> crossOverAll(std::mt19937& mtrand, std::vector<std::pair<int, int>> allParents,std::vector<std::vector<int>> allGeneration, double mutationChance){
-        std::vector<std::vector<int>> secondGeneration;
-        std::transform(allParents.begin(), allParents.end(), std::back_inserter(secondGeneration), [&mutationChance,&allGeneration,allParents, &mtrand](std::pair<int, int> currentPair){
-            std::vector<int> nextgeneration = crossOver(mtrand, currentPair, allGeneration, mutationChance);
-            return nextgeneration;
-        });
-
+    static List<List<Integer>> crossOverAll(List<Pair<Integer, Integer>> allParents, List<List<Integer>> allGeneration, double mutationChance){
+        List<List<Integer>> secondGeneration = new ArrayList<>();
+        for(int i = 0; i < allParents.size(); i++){
+           secondGeneration.add(crossOver(allParents.get(i),allGeneration,mutationChance));
+        }
         return secondGeneration;
     }
 
 
-    void outputGeneration(std::ofstream& ostream, std::vector<std::vector<int>> population, int popSize, int generation){
-        ostream << "GENERATION: " << generation << std::endl;
-        for(int i = 0; i < popSize; i++)
-        {
-            bool firstTime = true;
-            for(auto& j: population[i])
-            {
-                if(firstTime){
-                    ostream << static_cast<int>(j);
-                    firstTime = false;
-                } else{
-                    ostream << "," << static_cast<int>(j);
-                }
-            }
-            ostream << std::endl;
-        }
-    }
-
-    void outputFinal(std::ofstream& ostream, Population population,
-                     std::vector<Location> allLocation, std::pair<int, double> difference){
-        ostream << "SOLUTION:" << std::endl;
-        std::cout << "The fittest one is " << difference.first << std::endl;
-        std::vector<int> finalResult = population.mMembers[difference.first];
-        for(auto& i: finalResult){
-            ostream << allLocation[i].mName << std::endl;
-        }
-        ostream << allLocation[0].mName << std::endl;
-        ostream << "DISTANCE: " << difference.second << " miles";
-    }
-    */
-
-    ArrayList<Pair<Integer, Integer>> calculateFitness(List<List<Integer>> allPopulation, List<Location> allLocation){
+    /*
+    Following is for part 2
+     */
+    static ArrayList<Pair<Integer, Integer>> calculateFitness(List<List<Integer>> allPopulation, List<Location> allLocation) {
         ArrayList<Pair<Integer, Integer>> allFitness = new ArrayList<>();
-
-        for(int i = 0 ; i < allPopulation.size(); i++){
+        for(int i = 0; i < allPopulation.size(); i++){
             List<Integer> currentRoute = allPopulation.get(i);
+            System.out.println("Current route is " + currentRoute);
             int counter = 0;
             int currentSum = 0;
             Location fromLocation = allLocation.get(currentRoute.get(counter));
             Location toLocation = allLocation.get(currentRoute.get(++counter));
-            currentSum += fromLocation.mapOfLocation.getOrDefault(toLocation,-1);
+            System.out.println("from Location is " + fromLocation.currentLoc);
+            System.out.println("to Location is " + toLocation.currentLoc);
 
-            for(int j = 1; j < allPopulation.size()-1; j++) {
+            currentSum += fromLocation.mapOfLocation.getOrDefault(toLocation.currentLoc, -1);
+
+            counter = 2;
+            for (int j = 1; j < allLocation.size() - 1; j++) {
                 fromLocation = toLocation;
-                toLocation = allLocation.get(currentRoute.get(++counter));
-                currentSum += fromLocation.mapOfLocation.getOrDefault(toLocation,-1);
+                toLocation = allLocation.get(currentRoute.get(counter));
+                System.out.println("from Location is " + fromLocation.currentLoc);
+                System.out.println("to Location is " + toLocation.currentLoc);
+                currentSum += fromLocation.mapOfLocation.getOrDefault(toLocation.currentLoc, -1);
+                counter ++;
             }
 
-
             allFitness.add(new Pair<>(i, currentSum));
+
         }
 
-        allFitness.sort(Comparator.comparingInt(Pair::getValue));
 
         return allFitness;
     }
 
-    static void initialPopulation(int population, int allCities,List<List<Integer>> currentFile){
+    /*
+    Following is for part one
+     */
+    static void initialPopulation(int population, int allCities, List<List<Integer>> currentFile) {
         List<Integer> currentList = new ArrayList<>();
-        for(int j = 0; j < allCities; j ++)
-        {
+        for (int j = 0; j < allCities; j++) {
             currentList.add(j);
         }
 
@@ -329,7 +247,7 @@ public class TravelSalesMan {
         System.out.println(currentList);
         currentFile.add(currentList);
 
-        for(int i = 0; i < population; i++){
+        for (int i = 0; i < population; i++) {
             List<Integer> row = new ArrayList<>(currentList);
             Collections.shuffle(row);
             System.out.println(row);
@@ -337,71 +255,91 @@ public class TravelSalesMan {
         }
 
         System.out.println(currentFile);
-
     }
 
-    static void processCommand(ArrayList<Location> allLocation, boolean)
-    {
+    /*
+    static List<Integer> outputFinal()(
+                    List<List<Integer>> allLocation, Pair<Integer, Integer> difference){
+        System.out.println("All the difference is " + difference);
+        List<Integer> finalResult = allLocation.get(difference.getKey());
+        return finalResult;
+    }
+    */
+
+    static void processCommand(List<Location> allLocation) {
         int population = allLocation.size();
         int generation = 8;
-
-        /*
-        int seed = atoi(argv[5]);
-        std::mt19937 mtrand(seed);
-
-        std::ifstream inputFile;
-        inputFile.open (fileName);
-*/
 
         // Generate the permutation size
         int locationSize = allLocation.size();
         List<List<Integer>> allDestiPerm = new ArrayList<>();
         initialPopulation(population, locationSize, allDestiPerm);
 
-
-        // Part 2 Fitness
-        ArrayList<Pair<Integer,Double>> difference = calculateFitness(allDestiPerm, allLocation);
-        //outputFitness(ostream, difference);
-
-        /*
-        for(int i = 1; i < generation + 1; i++){
-
-
+        for(int i = 0; i < generation + 1; i++){
             // Part 2 Fitness
-            ArrayList<std::pair<int,double>> difference = calculateFitness(population,allLocation);
-            outputFitness(ostream, difference);
+            ArrayList<Pair<Integer, Integer>> difference = calculateFitness(allDestiPerm, allLocation);
 
             // Part 3 Selection
-            ArrayList<double> normalizedVector = generatePossibility(difference);
-            ArrayList<std::pair<int, int>> allGeneratedPair = constructPairs(normalizedVector,mtrand);
-            outputPairs(ostream, allGeneratedPair);
+            List<Double> normalizedVector = generatePossibility(difference);
+            List<Pair<Integer,Integer>> allGeneratedPair = constructPairs(normalizedVector);
+            System.out.println("Current Parents are " + allGeneratedPair);
 
             // Part 4
-            ArrayList<std::vector<int>> secondGeneration = crossOverAll(mtrand,allGeneratedPair,population.mMembers, mutationChance);
-            outputGeneration(ostream, secondGeneration, popSize, i);
-            population.mMembers = secondGeneration;
+            allDestiPerm  = crossOverAll(allGeneratedPair,allDestiPerm, 0.05);
+            System.out.println("Current Result is " + allDestiPerm);
 
         }
 
+        //ArrayList<Pair<Integer, Integer>> difference = calculateFitness(allDestiPerm, allLocation);
+        //Collections.sort(difference, Comparator.comparingInt(Pair::getValue));
 
-        // Part 2 Fitness
-        std::vector<std::pair<int,double>> difference = calculateFitness(population,allLocation);
-        outputFitness(ostream, difference);
-
+        /*
         // Final Result
-        std::sort(difference.begin(),difference.end(),compare);
-        outputFinal(ostream, population,allLocation,difference[0]);
-
-
-        inputFile.close();
-        ostream.close();
+        List<Integer> finalArray =  outputFinal(allDestiPerm,difference.get(0));
+        List<Location> finalLocation = new ArrayList<>();
+        for(int i = 0; i < allLocation.size(); i++){
+            finalLocation.add(allLocation.get(finalArray.get(i)));
+        }
         */
+
     }
 
     public static void main(String[] args) {
         List<Location> allLocation = new ArrayList<>();
+        Location paris = new Location(20, 20, "Paris");
+        Location london = new Location(30, 30, "London");
+        Location Shanghai = new Location(40, 40, "Shanghai");
+        Location beijing = new Location(20, 20, "beijing");
+        Location tianjing = new Location(20, 20, "tianjing");
+        Location nanjing = new Location(20, 20, "nanjing");
+        Location fan = new Location(20, 20, "fan");
+        Location ben = new Location(20, 20, "ben");
+        Location chun = new Location(20, 20, "chun");
+        allLocation.add(paris);
+        allLocation.add(london);
+        allLocation.add(Shanghai);
+        allLocation.add(beijing);
+        allLocation.add(tianjing);
+        allLocation.add(nanjing);
+        allLocation.add(fan);
+        allLocation.add(ben);
+        allLocation.add(chun);
+        paris.addLocation(london, 30000);
+        paris.addLocation(Shanghai, 50000);
+        Shanghai.addLocation(paris, 2000);
+        Shanghai.addLocation(london, 5000);
+        london.addLocation(paris, 3000);
+        london.addLocation(Shanghai, 1000);
+        for (Location l : allLocation) {
+            for (Location l2 : allLocation) {
+                if (l2.getCurrentLoc().equals(l.currentLoc)) continue;
+                Random rand = new Random();
+                l.addLocation(l2, rand.nextInt(65534));
+            }
+        }
+        Map<String, Integer> priceMap  = london.mapOfLocation;
+        System.out.println("Current map is " + priceMap);
 
-
-
+        processCommand(allLocation);
     }
 }
