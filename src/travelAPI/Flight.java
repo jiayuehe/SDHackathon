@@ -1,21 +1,12 @@
 package travelAPI;
 
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import jdk.nashorn.internal.parser.JSONParser;
-import netscape.javascript.JSObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Scanner;
 
 
@@ -23,18 +14,26 @@ import java.util.Scanner;
 public class Flight{
     private String destination;
     private String origin;
+    private String startMonth;
+    private String endMonth;
     private static final String APIKEY = "<API-KEY>";
 
-    public Flight(String des, String ori) {
-        destination = des;
-        origin = ori;
+    public Flight(String des, String ori, String startMonth, String endMonth) {
+        this.destination = des;
+        this.origin = ori;
+        this.startMonth = startMonth;
+        this.endMonth = endMonth;
+        try {
+            query();
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
 
-    private static final long serialVersionUID = 1L;
+    protected void query() throws IOException {
 
-    protected void service() throws IOException {
-
-        String url = "http://api.travelpayouts.com/v1/prices/cheap?origin=MOW&destination=HKT&depart_date=2018-12&return_date=2018-12&token="+ APIKEY;
+        String url = "http://api.travelpayouts.com/v1/prices/cheap?origin="+ origin + "&destination=" + destination +
+                "&depart_date="+ startMonth + "&return_date=" + endMonth + "&token="+ APIKEY;
 
         URL obj = new URL(url);
 
@@ -79,13 +78,5 @@ public class Flight{
         }
     }
 
-    public static void main(String[] args) {
-        Flight flight = new Flight("mos","hi");
-        try {
-            flight.service();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 }
