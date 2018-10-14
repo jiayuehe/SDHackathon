@@ -1,0 +1,123 @@
+html, body {
+  height: 100%;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+
+.full-screen {
+  position: absolute;
+  top: 56px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.padding-0 {
+    padding-right:0;
+    padding-left:0;
+}
+
+.timeline {
+  padding: 0;
+  overflow: scroll;
+}
+
+.trip-items {
+  padding: 15px;
+}
+
+.trip-item {
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+
+.navbar-light .navbar-brand {
+  color: #426F1C;
+  text-transform: uppercase;
+}
+
+.trip-header {
+  height: 150px;
+  width: 100%;
+  position: relative;
+}
+
+.trip-header .trip-header-overlay {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 0;
+}
+
+.trip-header .trip-cover {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  position: absolute;
+  z-index: -10;
+}
+
+.trip-header .trip-details {
+  padding: 15px;
+  z-index: 100;
+  position: relative;
+}
+
+.trip-header .trip-details h1.trip-title {
+  color: #FFFFFF;
+  font-size: 1.75em;
+}
+
+.trip-header .trip-details h2.trip-place {
+  color: #FFFFFF;
+  font-size: 1.15em;
+}
+
+.trip-header .trip-details p.trip-description {
+  color: #FFFFFF;
+  font-size: 1.05em;
+  font-weight: 100;
+}
+
+.bg-light {
+  z-index: 999;
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.25);
+}
+
+.pac-container {
+    z-index: 1051 !important;
+}
+
+.item-hotel {
+  border-left: 10px solid #2ecc71;
+}
+
+.item-hotel .icon {
+  color: #2ecc71;
+}
+
+.item-place {
+  border-left: 10px solid #e74c3c;
+}
+
+.item-place .icon {
+  color: #e74c3c;
+}
+
+.item-event {
+  border-left: 10px solid #3498db;
+}
+
+.item-event .icon {
+  color: #3498db;
+}

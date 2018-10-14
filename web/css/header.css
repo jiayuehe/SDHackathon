@@ -1,0 +1,30 @@
+#navigation{
+	background: white !important;
+	height: 50px;
+	color: #f9880e!important;
+}
+
+.nav-img{
+	height: 45px !important;
+}
+
+
+.navbar-nav{
+	/*border-left: 1px solid #f9880e;*/
+}
+.nav-item{
+	/*border-right:1px solid #f9880e;*/
+	/*border-left:1px solid #f9880e;*/
+	/*border-radius: 10px;*/
+	line-height: 31px;
+	width: 120px;
+	text-align: center;
+}
+
+.nav-link:hover{
+	/*background-color: #f9880e !important;*/
+	/*color: white !important;*/
+	color:#f9880e !important;
+	font-weight: bold!important;
+
+}

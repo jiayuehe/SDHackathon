@@ -1,5 +1,4 @@
 package passwordhasher;
-import sun.rmi.rmic.Constants;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;

@@ -17,7 +17,7 @@ public class JdbcClass {
     private static ResultSet rs = null;
     private static PreparedStatement ps = null;
     private static String driverName = "com.mysql.jdbc.Driver";
-    private static String password = "1304kenya";
+    private static String password = "WangXueYuan123";
     public static void connect(){
         try {
             Class.forName(driverName);
