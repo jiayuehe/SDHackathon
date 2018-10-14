@@ -212,7 +212,11 @@ public class TravelSalesMan {
             //System.out.println("from Location is " + fromLocation.name);
           //  System.out.println("to Location is " + toLocation.name);
 
-            currentSum += fromLocation.getPriceMap().getOrDefault(toLocation.name, -1);
+            currentSum += fromLocation.getPriceMap().getOrDefault(toLocation.name, 1000000);
+            if(currentSum < 0){
+                // check overflow
+                currentSum = Integer.MAX_VALUE;
+            }
 
             counter = 2;
             for (int j = 1; j < allLocation.size() - 1; j++) {
@@ -220,7 +224,11 @@ public class TravelSalesMan {
                 toLocation = allLocation.get(currentRoute.get(counter));
                 //System.out.println("from Location is " + fromLocation.name);
                 //System.out.println("to Location is " + toLocation.name);
-                currentSum += fromLocation.getPriceMap().getOrDefault(toLocation.name, -1);
+                currentSum += fromLocation.getPriceMap().getOrDefault(toLocation.name, 1000000);
+                if(currentSum < 0){
+                    // check overflow
+                    currentSum = Integer.MAX_VALUE;
+                }
                 counter ++;
             }
 
