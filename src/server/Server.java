@@ -3,6 +3,7 @@ package server;
 import TravellingSalesman.Location;
 import TravellingSalesman.TravelSalesMan;
 import com.google.gson.Gson;
+import database.JdbcClass;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -85,7 +86,8 @@ public class Server extends WebSocketServer {
                 teamBroadcast(teamName, "{'type': 'ADD_LOCATION', 'origin':" + origin + "," +
                                                     " 'destination' :" + destination + "}");
                 break;
-            case "SAVE":
+
+            case "CALCULATE":
                 String startMonth = query.content;
                 Set<Location> locations = new HashSet<>();
 
@@ -93,6 +95,12 @@ public class Server extends WebSocketServer {
                     Location location = new Location(name);
                     locations.add(location);
                 }
+
+                for (Location location : locations) {
+                    System.out.println("YUEUYE WANT TO SEE THIS");
+                    System.out.println(location.getName());
+                }
+
 
                 for (Location location : locations) {
                     makeConnection(location, locations, startMonth);
@@ -114,7 +122,7 @@ public class Server extends WebSocketServer {
                 teamBroadcast(teamName,json);
 
                 // Save to database
-
+                JdbcClass.save()
         }
 
     }
@@ -123,7 +131,7 @@ public class Server extends WebSocketServer {
         int sum = 0;
         for(int i = 1; i < finalSolution.size(); i++){
             Location toLocation = finalSolution.get(i);
-            sum += startPosition.getPriceMap().get(toLocation);
+            sum += startPosition.getPriceMap().getOrDefault(toLocation,10000);
             startPosition = toLocation;
         }
         return sum;

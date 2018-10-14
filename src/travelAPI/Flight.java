@@ -15,7 +15,7 @@ public class Flight{
     private String destination;
     private String origin;
     private String startMonth;
-    private static final String APIKEY = "<API-KEY>";
+    private static final String APIKEY = "e3524cec47f0861ab5184f88349f42de";
     private APIResponse response;
 
     public Flight(String des, String ori, String startMonth) {

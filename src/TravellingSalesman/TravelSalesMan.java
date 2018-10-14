@@ -57,7 +57,6 @@ public class TravelSalesMan {
             probabilityV.add(1.0/(difference.size()));
         }
 
-        System.out.println("Current probability V is " + probabilityV);
         // Multiply the first two by 6
         int index = difference.get(0).getKey();
         probabilityV.set(index, probabilityV.get(index) * 6);
@@ -73,20 +72,20 @@ public class TravelSalesMan {
                 probabilityV.set(index, probabilityV.get(index) * 3);
             }
         }
-        System.out.println("After Multiplication Current probability V is " + probabilityV);
+       //System.out.println("After Multiplication Current probability V is " + probabilityV);
         double totalNumber = 0;
 
         for(double currentProb: probabilityV){
-            System.out.print(currentProb + "+");
+           // System.out.print(currentProb + "+");
             totalNumber += currentProb;
         }
-        System.out.println("Current totalNumber is " + totalNumber);
+        //System.out.println("Current totalNumber is " + totalNumber);
 
         ArrayList<Double> normalizedVector = new ArrayList<>();
         for (Double aProbabilityV : probabilityV) {
             normalizedVector.add(aProbabilityV / totalNumber);
         }
-        System.out.println("After Normalization, Current probability V is " + normalizedVector);
+       // System.out.println("After Normalization, Current probability V is " + normalizedVector);
         return normalizedVector;
     }
 
@@ -99,18 +98,18 @@ public class TravelSalesMan {
         for (Double aProbability : probability) {
             double currentProb = aProbability;
             counter += currentProb;
-            System.out.println("Current Counter is " + counter);
+            //System.out.println("Current Counter is " + counter);
             cumulatedVector.add(counter);
         }
 
-        System.out.println("Current Cumulative Probability Vector is " + cumulatedVector);
+       // System.out.println("Current Cumulative Probability Vector is " + cumulatedVector);
 
         // generate the pairs
         for(int i = 0; i < probability.size(); i++){
             double randomGeneratorOne = Math.random();
             double randomGeneratorTwo = Math.random();
 
-            System.out.println("Parent one is " + randomGeneratorOne + "Parent two is " + randomGeneratorTwo);
+            //System.out.println("Parent one is " + randomGeneratorOne + "Parent two is " + randomGeneratorTwo);
             int parentA = -1;
             int parentB = -1;
             for(int j = 0; j < cumulatedVector.size();j++){
@@ -205,13 +204,13 @@ public class TravelSalesMan {
         ArrayList<Pair<Integer, Integer>> allFitness = new ArrayList<>();
         for(int i = 0; i < allPopulation.size(); i++){
             List<Integer> currentRoute = allPopulation.get(i);
-            System.out.println("Current route is " + currentRoute);
+          //  System.out.println("Current route is " + currentRoute);
             int counter = 0;
             int currentSum = 0;
             Location fromLocation = allLocation.get(currentRoute.get(counter));
             Location toLocation = allLocation.get(currentRoute.get(++counter));
-            System.out.println("from Location is " + fromLocation.name);
-            System.out.println("to Location is " + toLocation.name);
+            //System.out.println("from Location is " + fromLocation.name);
+          //  System.out.println("to Location is " + toLocation.name);
 
             currentSum += fromLocation.getPriceMap().getOrDefault(toLocation.name, -1);
 
@@ -219,8 +218,8 @@ public class TravelSalesMan {
             for (int j = 1; j < allLocation.size() - 1; j++) {
                 fromLocation = toLocation;
                 toLocation = allLocation.get(currentRoute.get(counter));
-                System.out.println("from Location is " + fromLocation.name);
-                System.out.println("to Location is " + toLocation.name);
+                //System.out.println("from Location is " + fromLocation.name);
+                //System.out.println("to Location is " + toLocation.name);
                 currentSum += fromLocation.getPriceMap().getOrDefault(toLocation.name, -1);
                 counter ++;
             }
@@ -243,13 +242,13 @@ public class TravelSalesMan {
         }
 
         Collections.shuffle(currentList);
-        System.out.println(currentList);
+        //System.out.println(currentList);
         currentFile.add(currentList);
 
         for (int i = 0; i < population; i++) {
             List<Integer> row = new ArrayList<>(currentList);
             Collections.shuffle(row);
-            System.out.println(row);
+            //System.out.println(row);
             currentFile.add(row);
         }
 
@@ -259,7 +258,7 @@ public class TravelSalesMan {
 
     static List<Integer> outputFinal(
                     List<List<Integer>> allLocation, Pair<Integer, Integer> difference){
-        System.out.println("All the difference is " + difference);
+        //System.out.println("All the difference is " + difference);
         List<Integer> finalResult = allLocation.get(difference.getKey());
         return finalResult;
     }
@@ -273,15 +272,15 @@ public class TravelSalesMan {
         int locationSize = allLocation.size();
         List<List<Integer>> allDestiPerm = new ArrayList<>();
         initialPopulation(population, locationSize, allDestiPerm);
-
         for(int i = 0; i < generation + 1; i++){
             // Part 2 Fitness
             ArrayList<Pair<Integer, Integer>> difference = calculateFitness(allDestiPerm, allLocation);
+            System.out.println("Current Difference is " + difference);
 
             // Part 3 Selection
             List<Double> normalizedVector = generatePossibility(difference);
             List<Pair<Integer,Integer>> allGeneratedPair = constructPairs(normalizedVector);
-            System.out.println("Current Parents are " + allGeneratedPair);
+            //System.out.println("Current Parents are " + allGeneratedPair);
 
             // Part 4
             allDestiPerm  = crossOverAll(allGeneratedPair,allDestiPerm, 0.05);
@@ -302,39 +301,4 @@ public class TravelSalesMan {
 
     }
 
-    public static void main(String[] args) {
-        List<Location> allLocation = new ArrayList<>();
-        Location paris = new Location(20, 20, "Paris");
-        Location london = new Location(30, 30, "London");
-        Location Shanghai = new Location(40, 40, "Shanghai");
-        Location beijing = new Location(20, 20, "beijing");
-        Location tianjing = new Location(20, 20, "tianjing");
-        Location nanjing = new Location(20, 20, "nanjing");
-        Location fan = new Location(20, 20, "fan");
-        Location ben = new Location(20, 20, "ben");
-        Location chun = new Location(20, 20, "chun");
-        allLocation.add(paris);
-        allLocation.add(london);
-        allLocation.add(Shanghai);
-        allLocation.add(beijing);
-        allLocation.add(tianjing);
-        allLocation.add(nanjing);
-        allLocation.add(fan);
-        allLocation.add(ben);
-        allLocation.add(chun);
-        paris.addLocation(london, 30000);
-        paris.addLocation(Shanghai, 50000);
-        Shanghai.addLocation(paris, 2000);
-        Shanghai.addLocation(london, 5000);
-        london.addLocation(paris, 3000);
-        london.addLocation(Shanghai, 1000);
-        for (Location l : allLocation) {
-            for (Location l2 : allLocation) {
-                if (l2.getName().equals(l.name)) continue;
-                Random rand = new Random();
-                l.addLocation(l2, rand.nextInt(65534));
-            }
-        }
-        processCommand(allLocation);
-    }
 }

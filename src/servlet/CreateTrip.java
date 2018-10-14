@@ -17,6 +17,8 @@ public class CreateTrip extends HttpServlet {
         boolean result = true;
         if (JdbcClass.checkIfTripNameExist(tripName)) {
            result = false;
+        } else {
+            JdbcClass.createTrip(tripName,"North America");
         }
 
         if (result) {

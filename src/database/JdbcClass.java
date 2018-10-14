@@ -337,4 +337,34 @@ public class JdbcClass {
         }
         return false;
     }
+
+    public static void save(String trip_id, String result) {
+        connect();
+        try {
+            String query = "INSERT INTO User_to_Trip(trip_id, result) VALUES(?, ?)";
+            ps = conn.prepareStatement(query);
+            ps.setString(1, trip_id);
+            ps.setString(2, result);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+    }
+
+    public static void createTrip(String tripName, String mainPlace) {
+        connect();
+        try {
+            String query = "INSERT INTO Trip(title, mainplace) VALUES(?, ?)";
+            ps = conn.prepareStatement(query);
+            ps.setString(1, tripName);
+            ps.setString(2, mainPlace);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+    }
 }

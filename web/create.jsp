@@ -78,7 +78,7 @@
                     let origin = data.origin;
                     console.log("dest is " + dest);
                     console.log("origin is " + origin);
-
+                    break;
             }
         }
 
@@ -106,16 +106,19 @@
         }
 
         // City name, Dest, price,
-        function calculateResult() {
+        function save() {
+            let startMonth = document.getElementById("flightDate").value;
+            console.log("We are in save message");
             /* TODO: change the following user and content */
             let queryString = JSON.stringify({
                 type: "CALCULATE",
                 userName: userName,
                 tripName: tripName,
-                content: content
+                content: startMonth
             });
 
-            socket.send(calculateMessage);
+            console.log(queryString);
+            socket.send(queryString);
             return false;
         }
 
@@ -163,6 +166,8 @@
 
                 <!-- Trigger the modal with a button -->
                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#flightModal">Add Flights</button>
+                <button type="submit" onclick="save()">Save</button>
+
 
                 <!-- Modal -->
                 <div class="modal fade" id="flightModal" role="dialog">

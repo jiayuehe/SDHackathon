@@ -12,7 +12,7 @@ public class Location {
         return priceMap;
     }
 
-    private Map<String, Integer> priceMap;
+    private Map<String, Integer> priceMap = new HashMap<>();
 
     public Location(String name) {
         this.name = name;
@@ -29,10 +29,6 @@ public class Location {
     }
 
     public void addLocation(Location k, int price){
-        if(priceMap == null){
-            priceMap = new HashMap<>();
-        }
-
         priceMap.put(k.name,price);
     }
 
