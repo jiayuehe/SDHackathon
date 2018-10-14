@@ -171,12 +171,7 @@ public class Server extends WebSocketServer {
         } */
         System.out.println("ERROR from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
     }
-
-    @Override
-    public void onStart() {
-
-    }
-
+    
     public static void main(String[] args) {
         new Server().start();
     }

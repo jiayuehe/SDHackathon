@@ -121,21 +121,61 @@
 
                     }
 
-
-
                     break;
                 case "ADD_LOCATION":
-                    let dest = data.destination;
-                    let origin = data.origin;
+                    let currentUser = msg.userName;
+                    let dest = msg.destination;
+                    let origin = msg.origin;
+                    console.log("user is " + currentUser)
                     console.log("dest is " + dest);
                     console.log("origin is " + origin);
+                    var cdate = new Date();
+
+
+                    var newContent = "";
+                    newContent += '<ul class="timeline">';
+                    newContent += '<li>';
+                    newContent += 'New Flight Added';
+                    newContent += '<a href="#" class="float-right">'
+                    newContent += cdate.toLocaleTimeString();
+                    newContent += '</a>';
+                    newContent += '<p>';
+                    newContent += 'FROM: '
+                    newContent += origin.toUpperCase();
+                    newContent += '<br/> TO: ';
+                    newContent += dest.toUpperCase();
+                    newContent += '</li>';
+                    newContent += '</ul>';
+
+                    var originalContent = document.getElementById("addTimeLine").innerHTML;
+                    originalContent += newContent;
+
+                    document.getElementById("addTimeLine").innerHTML = originalContent;
+
                     break;
+                case "RESULT":
+
+                    console.log("Result here.....");
+
+
+                    console.log(data);
+                    console.log(msg.list);
+                    console.log(msg.price);
+                    var route = msg.list[0];
+                    for(var i = 1; i < msg.list.length ; i++){
+                        route +=   " --> " +  msg.list[i];
+                    }
+                    var price = msg.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    document.getElementById("totalPrice").innerHTML = price;
+                    document.getElementById("route").innerHTML = route;
+                    document.getElementById("displayPrice").style.visibility="visible";
+
             }
         }
 
         function addLocations() {
-            let dest = document.getElementById("search-toCity").value;
-            let origin = document.getElementById("search-fromCity").value;
+            let dest = document.getElementById("search-toCity").value.substr(0,3);
+            let origin = document.getElementById("search-fromCity").value.substr(0, 3);
             let startMonth = document.getElementById("flightDate").value;
 
             let flightQuery = {
@@ -169,7 +209,13 @@
             });
 
             console.log(queryString);
+
             socket.send(queryString);
+
+
+
+            console.log("Saving....");
+
             return false;
         }
 
@@ -177,6 +223,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/trip.css">
     <link rel="stylesheet" href="./css/chat.css">
+    <link rel="stylesheet" type="text/css" href="./css/timeline.css">
 
 </head>
 <body onload="connectToServer()">
@@ -201,23 +248,22 @@
 
         <div class="col timeline">
             <div class="trip-header">
-                <!-- Image?????? -->
+                <img src="img/cape.jpg" class="trip-cover">
                 <div class="trip-header-overlay"></div>
 
                 <div class="trip-details">
-                    <h2> Trip to ${param.place} </h2>
+                    <h2> Your Trip to ${param.place} </h2>
                 </div>
             </div>
 
             <div class="trip-items">
-                Adding ...
+
                 <!-- <button onclick="createHotel();">Hotel</button> -->
                 <br/>
 
-
                 <!-- Trigger the modal with a button -->
                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#flightModal">Add Flights</button>
-                <button type="submit" onclick="save()">Save</button>
+                <button type="button" class="btn btn-info" onclick="save()">Calculate Price</button>
 
 
                 <!-- Modal -->
@@ -252,9 +298,32 @@
                         </div>
 
                     </div>
+                </div> <!-- Close Modal -->
+            </div> <!-- Close Trip Items -->
+
+            <!-- TimeLine of Items Added -->
+            <div class="container mt-5 mb-5">
+                <div id="displayPrice">
+                    Your Pirce is: $<span id="totalPrice"></span>
+                    <br/>
+                    Your Optimal Route is <span id="route"></span>
+                </div>
+
+                <div class="row">
+
+                    <div class="col" id="addTimeLine">
+                        <br/>
+                        <h4>Group Activities</h4>
+                        <ul class="timeline">
+
+
+                        </ul>
+                    </div>
                 </div>
             </div>
+
         </div>  <!-- Close timeline -->
+
 
 
         <!-- Start Chat Room -->
@@ -283,9 +352,10 @@
     </div> <!-- Close Row -->
 </div> <!-- Close container -->
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.js"></script>
 <script src="./js/combodate.js"></script>
@@ -293,6 +363,7 @@
 
 <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNaOYQQnHWBFLos6heIboivme-CaDJ8C0&libraries=places&callback=initMap" async defer></script>
 
 </body>
 </html>
