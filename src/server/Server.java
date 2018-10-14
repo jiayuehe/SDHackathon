@@ -57,7 +57,6 @@ public class Server extends WebSocketServer {
         Query query = gson.fromJson(message, Query.class);
         String username = query.userName;
         String teamName = query.tripName;
-        Set<String> nameSet = teamToLocationsName.get(teamName);
         switch (query.type) {
             case "INITIALIZE":
                 System.out.println("Initializing");
@@ -68,7 +67,6 @@ public class Server extends WebSocketServer {
                 System.out.println(teamMap);
                 break;
             case "CHAT":
-
                 teamBroadcast(teamName,"{'type': 'CHAT', 'username' :" + username +
                         ", 'content':" + query.content + "}");
                 break;
@@ -79,19 +77,19 @@ public class Server extends WebSocketServer {
             case "ADD_LOCATION":
                 String destination, origin;
 
-                FlightQuery flightQuery = gson.fromJson(query.content, FlightQuery.class);
-                destination = flightQuery.dest;
-                origin = flightQuery.origin;
-                nameSet.add(destination);
-                nameSet.add(origin);
-                teamBroadcast(teamName, "{'origin':" + origin + "," +
-                                                    "destination:" + destination + "}");
+                destination = query.flightQuery.dest;
+                origin = query.flightQuery.origin;
+                teamToLocationsName.computeIfAbsent(teamName, k -> new HashSet<>());
+                teamToLocationsName.get(teamName).add(destination);
+                teamToLocationsName.get(teamName).add(origin);
+                teamBroadcast(teamName, "{'type': 'ADD_LOCATION', 'origin':" + origin + "," +
+                                                    " 'destination' :" + destination + "}");
                 break;
-
             case "SAVE":
                 String startMonth = query.content;
                 Set<Location> locations = new HashSet<>();
-                for (String name : nameSet) {
+
+                for (String name : teamToLocationsName.get(teamName)) {
                     Location location = new Location(name);
                     locations.add(location);
                 }
