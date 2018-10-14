@@ -46,5 +46,12 @@ CREATE TABLE Flight(
     FOREIGN KEY fk1(trip_id) REFERENCES Trip(trip_id)
 );
 
+
+CREATE TABLE Trip_to_Result (
+	trip_id INT(11),
+    FOREIGN KEY fk3(trip_id) REFERENCES Trip(trip_id),
+    result  VARCHAR(50) NOT NULL
+);
+
     
 
