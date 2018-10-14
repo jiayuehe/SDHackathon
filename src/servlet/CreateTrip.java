@@ -23,10 +23,10 @@ public class CreateTrip extends HttpServlet {
         }
 
         if (result) {
-            getServletContext().getRequestDispatcher("/tripRegister.jsp").forward(request, response);
+            getServletContext().getRequestDispatcher("/home.jsp").forward(request, response);
         } else{
             System.out.println("We should be here");
-            RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/home.jsp");
+            RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/tripRegister.jsp");
             request.getSession().setAttribute("tripName", tripName);
             dispatch.forward(request, response);
         }
