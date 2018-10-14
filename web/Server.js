@@ -23,31 +23,52 @@ function parseData(data) {
 
 }
 
+function addLocations(dest,origin,price) {
+    let content = JSON.stringify({
+        dest: dest,
+        origin: origin,
+        startMonth: startMonth
+    });
+
+    let queryString = JSON.stringify({
+        type: "ADD_LOCATION",
+        userName: userName,
+        tripName: tripName,
+        content: content
+    });
+
+    socket.send(queryString);
+    return false;
+}
+
+/*
 function searchForCity(dest,origin,startMonth) {
     let content = JSON.stringify({
         dest: dest,
         origin: origin,
         startMonth: startMonth,
-        endMonth: endMonth + 1
+        endMonth: startMonth + 1
     });
 
     let queryString = JSON.stringify({
         type: "SEARCH",
-        user: user,
+        userName: userName,
+        tripName: tripName,
         content: content
     });
     //let searchQuery = "search?dest="+ dest +"&from=" + from + "&time=" + time;
 
     socket.send(queryString);
     return false;
-}
+} */
 
 
 function sendMessage() {
     /* TODO: change the following user and content */
     let queryString = JSON.stringify({
         type: "CHAT",
-        user: user,
+        userName: userName,
+        tripName: tripName,
         content: content
     });
 
@@ -60,7 +81,8 @@ function calculateResult() {
     /* TODO: change the following user and content */
     let queryString = JSON.stringify({
         type: "CALCULATE",
-        user: user,
+        userName: userName,
+        tripName: tripName,
         content: content
     });
 

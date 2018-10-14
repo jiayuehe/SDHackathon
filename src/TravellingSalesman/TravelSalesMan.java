@@ -210,18 +210,18 @@ public class TravelSalesMan {
             int currentSum = 0;
             Location fromLocation = allLocation.get(currentRoute.get(counter));
             Location toLocation = allLocation.get(currentRoute.get(++counter));
-            System.out.println("from Location is " + fromLocation.currentLoc);
-            System.out.println("to Location is " + toLocation.currentLoc);
+            System.out.println("from Location is " + fromLocation.name);
+            System.out.println("to Location is " + toLocation.name);
 
-            currentSum += fromLocation.mapOfLocation.getOrDefault(toLocation.currentLoc, -1);
+            currentSum += fromLocation.getPriceMap().getOrDefault(toLocation.name, -1);
 
             counter = 2;
             for (int j = 1; j < allLocation.size() - 1; j++) {
                 fromLocation = toLocation;
                 toLocation = allLocation.get(currentRoute.get(counter));
-                System.out.println("from Location is " + fromLocation.currentLoc);
-                System.out.println("to Location is " + toLocation.currentLoc);
-                currentSum += fromLocation.mapOfLocation.getOrDefault(toLocation.currentLoc, -1);
+                System.out.println("from Location is " + fromLocation.name);
+                System.out.println("to Location is " + toLocation.name);
+                currentSum += fromLocation.getPriceMap().getOrDefault(toLocation.name, -1);
                 counter ++;
             }
 
@@ -256,16 +256,16 @@ public class TravelSalesMan {
         System.out.println(currentFile);
     }
 
-    /*
-    static List<Integer> outputFinal()(
+
+    static List<Integer> outputFinal(
                     List<List<Integer>> allLocation, Pair<Integer, Integer> difference){
         System.out.println("All the difference is " + difference);
         List<Integer> finalResult = allLocation.get(difference.getKey());
         return finalResult;
     }
-    */
 
-    private static void processCommand(List<Location> allLocation) {
+
+    public static List<Location> processCommand(List<Location> allLocation) {
         int population = allLocation.size();
         int generation = 8;
 
@@ -289,17 +289,16 @@ public class TravelSalesMan {
 
         }
 
-        //ArrayList<Pair<Integer, Integer>> difference = calculateFitness(allDestiPerm, allLocation);
-        //Collections.sort(difference, Comparator.comparingInt(Pair::getValue));
+        ArrayList<Pair<Integer, Integer>> difference = calculateFitness(allDestiPerm, allLocation);
+        Collections.sort(difference, Comparator.comparingInt(Pair::getValue));
 
-        /*
         // Final Result
         List<Integer> finalArray =  outputFinal(allDestiPerm,difference.get(0));
         List<Location> finalLocation = new ArrayList<>();
         for(int i = 0; i < allLocation.size(); i++){
             finalLocation.add(allLocation.get(finalArray.get(i)));
         }
-        */
+        return finalLocation;
 
     }
 
@@ -331,14 +330,11 @@ public class TravelSalesMan {
         london.addLocation(Shanghai, 1000);
         for (Location l : allLocation) {
             for (Location l2 : allLocation) {
-                if (l2.getCurrentLoc().equals(l.currentLoc)) continue;
+                if (l2.getName().equals(l.name)) continue;
                 Random rand = new Random();
                 l.addLocation(l2, rand.nextInt(65534));
             }
         }
-        Map<String, Integer> priceMap  = london.mapOfLocation;
-        System.out.println("Current map is " + priceMap);
-
         processCommand(allLocation);
     }
 }
