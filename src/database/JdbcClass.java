@@ -17,7 +17,7 @@ public class JdbcClass {
     private static ResultSet rs = null;
     private static PreparedStatement ps = null;
     private static String driverName = "com.mysql.jdbc.Driver";
-    private static String password = "WangXueYuan123";
+    private static String password = "root";
     public static void connect(){
         try {
             Class.forName(driverName);
@@ -272,6 +272,7 @@ public class JdbcClass {
         return l;
     }
     public static List<Integer> getFlightList(int tripid){
+        connect();
         List<Integer> flights = new ArrayList<>();
         try{
             String queryCheck = "SELECT f.flight_id" +
@@ -293,6 +294,7 @@ public class JdbcClass {
         return flights;
     }
     public static Flight getFlight(int flightid){
+        connect();
         int tripId = 0;
         String fromLocation = "";
         String toLocation = "";
@@ -318,5 +320,21 @@ public class JdbcClass {
         }
         Flight f = new Flight(tripId, fromLocation, toLocation, startTime, arriveTime);
         return f;
+    }
+
+    public static boolean checkIfTripNameExist(String tripName) {
+        connect();
+        try {
+            String query = "SELECT t.title FROM Trip t WHERE t.title=?";
+            ps = conn.prepareStatement(query);
+            ps.setString(1, tripName);
+            rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            System.out.println();
+        }finally {
+            close();
+        }
+        return false;
     }
 }

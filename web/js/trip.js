@@ -64,13 +64,13 @@ $("#addItemModalShow").click(function() {
 
 function form_submit() {
 	console.log("Form Submitted??????????????");
- //    var flightFrom, flightTo;
+	var flightFrom, flightTo;
   
-	// flightFrom = autocompleteFrom.getPlace().name;
-	// flightTo = autocompleteTo.getPlace().name;
+	flightFrom = autocompleteFrom.getPlace().name;
+	flightTo = autocompleteTo.getPlace().name;
 	
-	// var fromAirport = flightFrom.substr(0,3);
-	// var toAirport = flightTo.substr(0,3);
+	var fromAirport = flightFrom.substr(0,3);
+	var toAirport = flightTo.substr(0,3);
 	
 	var dateInput = document.getElementById("flightDate").value;
 
@@ -82,6 +82,9 @@ function form_submit() {
 	// console.log("From: " + fromAirport);
 	// console.log("To: " + toAirport);
     console.log("Form Submitted+++++++++++++++++");
+
+    addLocations(fromAirport,toAirport);
+    
 
 }  
 

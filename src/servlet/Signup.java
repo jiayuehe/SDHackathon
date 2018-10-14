@@ -41,7 +41,7 @@ public class Signup extends javax.servlet.http.HttpServlet{
                 JdbcClass.registerUser(username, password);
                 User currentuser = JdbcClass.getUser(username);
                 request.getSession().setAttribute("currentuser", currentuser);
-                response.sendRedirect("/profile.jsp");
+                response.sendRedirect("/tripRegister.jsp");
                 return;
             }else {
                 // If flag is -1, that means there were errors
@@ -49,6 +49,7 @@ public class Signup extends javax.servlet.http.HttpServlet{
             }
         }
         RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/signup.jsp");
+        request.getSession().setAttribute("username", username);
         dispatch.forward(request, response);
     }
 }

@@ -1,25 +1,121 @@
+<%--&lt;%&ndash;--%>
+  <%--Created by IntelliJ IDEA.--%>
+  <%--User: yanxili--%>
+  <%--Date: 10/13/18--%>
+  <%--Time: 4:40 PM--%>
+  <%--To change this template use File | Settings | File Templates.--%>
+<%--&ndash;%&gt;--%>
+<%--<%@ page language="java" contentType="text/html; charset=UTF-8"--%>
+         <%--pageEncoding="UTF-8"%>--%>
+<%--<!doctype html>--%>
+
+<%--<html>--%>
+<%--<head>--%>
+    <%--<!-- <title>Tripi - <%= request.getAttribute("title") %></title> -->--%>
+
+
+<%--</head>--%>
+
+
+<%--</html>--%>
+
 <%--
   Created by IntelliJ IDEA.
-  User: yanxili
+  User: zifanshi
   Date: 10/13/18
-  Time: 4:40 PM
+  Time: 12:21 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
-<!doctype html>
 
+<!DOCTYPE html>
 <html>
 <head>
-    <!-- <title>Tripi - <%= request.getAttribute("title") %></title> -->
+    <title>Chat Client</title>
+    <script>
+        var userName = "<%= request.getSession().getAttribute("username") %>";
+        var tripName = "<%= request.getSession().getAttribute("tripName")%>";
+        var socket;
+        function connectToServer() {
+            socket = new WebSocket("ws://localhost:4444");
+            socket.onopen = function(event) {
+                socket.send(JSON.stringify({
+                    type : "INITIALIZE",
+                    tripName : tripName,
+                }))
+            };
+            socket.onmessage = function(event) {
+                parseData(event.data);
+            };
+            socket.onclose = function(event) {
+            };
+        }
 
+        function sendMessage() {
+            let content = document.getElementById("chatMessage").value;
+            let queryString = JSON.stringify({
+                type: "CHAT",
+                userName: userName,
+                tripName: tripName,
+                content: content
+            });
+            console.log("query send is:" + queryString);
+            socket.send(queryString);
+            return false;
+        }
+
+        function parseData(data) {
+            console.log(data);
+            switch (data.type) {
+                case "CHAT":
+                    let userName = data.username;
+                    let content = data.content;
+                    console.log("User name is " + userName);
+                    console.log("Content is "+ content);
+                     // TODO display here
+                case "JOIN_TEAM":
+
+            }
+        }
+
+        function addLocations() {
+            let content = JSON.stringify({
+                dest: dest,
+                origin: origin,
+                startMonth: startMonth
+            });
+
+            let queryString = JSON.stringify({
+                type: "ADD_LOCATION",
+                userName: userName,
+                tripName: tripName,
+                content: content
+            });
+
+            socket.send(queryString);
+            return false;
+        }
+
+        // City name, Dest, price,
+        function calculateResult() {
+            /* TODO: change the following user and content */
+            let queryString = JSON.stringify({
+                type: "CALCULATE",
+                userName: userName,
+                tripName: tripName,
+                content: content
+            });
+
+            socket.send(calculateMessage);
+            return false;
+        }
+
+    </script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/trip.css">
     <link rel="stylesheet" href="./css/chat.css">
 
 </head>
-
-<body>
+<body onload="connectToServer()">
 <nav id="navigation" class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
         <!-- <a class="navbar-brand" href="./home.jsp">Tripi</a> -->
@@ -84,7 +180,7 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" onclick="form_submit()" class="btn btn-success" data-dismiss="modal">Save</button>
+                                <button type="submit" onclick="addLocations()" class="btn btn-success" data-dismiss="modal">Save</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
@@ -145,8 +241,10 @@
                         </div>
                         <div class="type_msg">
                             <div class="input_msg_write">
-                                <input type="text" class="write_msg" placeholder="Type a message" />
-                                <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+
+                                <input type="text" class="write_msg" id = "chatMessage" placeholder="Type a message" />
+
+                                <button class="msg_send_btn" type="button" onclick="sendMessage()"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                             </div>
                         </div>
                     </div>
@@ -155,29 +253,6 @@
         </div> <!-- Close chatroom -->
     </div> <!-- Close Row -->
 </div> <!-- Close container -->
-
-<script>
-
-</script>
-
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-
-
-
-
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.js"></script>
-<script src="./js/combodate.js"></script>
-<script src="./js/trip.js"></script>
-
-<script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
-<!--
-   <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNaOYQQnHWBFLos6heIboivme-CaDJ8C0&callback=initMap">
-    </script> -->
-<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNaOYQQnHWBFLos6heIboivme-CaDJ8C0&libraries=places&callback=initMap" async defer></script> -->
 
 </body>
 </html>

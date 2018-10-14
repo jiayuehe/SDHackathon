@@ -48,7 +48,6 @@
 	
 	<body>
 
-
 		<!-- Nav Bar -->
 		<nav id="navigation" class="navbar navbar-expand-lg navbar-light bg-light">
 		  <div class="container">
@@ -252,6 +251,8 @@
 			// Make the search field auto-complete place names for user
 			var autocomplete;
 
+			var tripName = ${param.tripName}
+
 			function initAutocomplete() {
 		        // Create the autocomplete object, restricting the search to geographical
 		        // location types.
@@ -275,12 +276,12 @@
 				}
 				var place = autocomplete.getPlace();
 				var short_name = place.address_components[0]["short_name"]	
-				window.location.href = "create.jsp?place=" + encodeURI(short_name);
+				window.location.href = "create.jsp?place=" + encodeURI(short_name) + "&tripName=" + encodeURI(tripName);
 
 		    }// End function create
 
 		    function clickContent(continent){
-		    	window.location.href = "create.jsp?place=" + encodeURI(continent);
+		    	window.location.href = "create.jsp?place=" + encodeURI(continent)+ "&tripName=" + encodeURI(tripName);
 		    }
 
 		</script>

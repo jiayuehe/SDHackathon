@@ -59,8 +59,18 @@ public class Server extends WebSocketServer {
         String teamName = query.tripName;
         Set<String> nameSet = teamToLocationsName.get(teamName);
         switch (query.type) {
+            case "INITIALIZE":
+                System.out.println("Initializing");
+                if (!teamMap.containsKey(teamName)) {
+                    teamMap.put(teamName, new HashSet<>());
+                }
+                teamMap.get(teamName).add(conn);
+                System.out.println(teamMap);
+                break;
             case "CHAT":
-                teamBroadcast(teamName,"username:" + username + ",'message':" +message + "}");
+
+                teamBroadcast(teamName,"{'type': 'CHAT', 'username' :" + username +
+                        ", 'content':" + query.content + "}");
                 break;
             case "JOIN_TEAM":
                 joinTeam(conn, teamName);
@@ -132,19 +142,24 @@ public class Server extends WebSocketServer {
     }
 
     public void teamBroadcast(String teamName, String message) {
+        System.out.println(teamMap);
         Set<WebSocket> teamSockets = teamMap.get(teamName);
         for (WebSocket sock : teamSockets) {
-            sock.send(message);
+            if (sock == null) {
+                System.out.println("Socket dead");
+            } else {
+                sock.send(message);
+            }
         }
     }
 
     @Override
     public void onError(WebSocket conn, Exception ex) {
-        //ex.printStackTrace();
-        if (conn != null) {
+        ex.printStackTrace();
+        /*f (conn != null) {
             conns.remove(conn);
             // do some thing if required
-        }
+        } */
         System.out.println("ERROR from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
     }
 

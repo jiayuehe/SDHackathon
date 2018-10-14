@@ -12,27 +12,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-<!-- Custom styles for this template -->
-<link href="signup.css" rel="stylesheet">
-
 <title>Trip Selection</title>
 </head>
 <body>
-
  <div class="container">
 
-      <form class="form-request-help" method="POST" action="DispatcherServlet">
+      <form class="form-request-help" method="POST" action="CreateTrip">
         <h2 class="form-request-help-heading text-center">Planning Trips</h2>
           <h4 class="form-request-help-heading text-left">Create a new trip:</h4>
         <label for="tripHandle" class="sr-only">New Group Name </label>
-        <input type="text" name="tripHandle" class="form-control" placeholder="trojanTrip" required autofocus>
+        <input id = "tripName" .type="text" name="tripHandle" class="form-control" placeholder="trojanTrip" required autofocus>
         <input type="hidden" name="command" value="creaettripHandle" >
         <button class="btn btn-lg btn-primary btn-block" type="submit">submit</button>
-        
+
      </form>
    
-   
-    <form class="form-request-help" method="POST" action="DispatcherServlet">
+
+    <form class="form-request-help" method="POST" action="JoinTrip">
         <h4 class="form-request-help-heading text-left">Join a Trip:</h4>
         <label for="tripHandle" class="sr-only"> Join Trip Name </label>
         <input type="text" name="tripHandle" class="form-control" placeholder="tommyTrip" required autofocus>
