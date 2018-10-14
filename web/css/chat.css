@@ -53,7 +53,6 @@ img{ max-width:100%;}
 
 .incoming_msg_img {
   display: inline-block;
-  width: 6%;
 }
 .received_msg {
   display: inline-block;

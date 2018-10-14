@@ -52,6 +52,23 @@
 
         function sendMessage() {
             let content = document.getElementById("chatMessage").value;
+            var cdate = new Date();
+            var newContent = "";
+            newContent += '<div class="outgoing_msg">';
+            newContent += '<div class="sent_msg">';
+            newContent += '<p>';
+            newContent += content;
+            newContent += '</p>';
+            newContent += '<span class="time_date">';
+            newContent += cdate.toLocaleTimeString();
+            newContent += '</span>';
+            newContent += '</div></div>';
+            var originalContent = document.getElementById("msgHistory").innerHTML;
+            originalContent += newContent;
+            document.getElementById("msgHistory").innerHTML = originalContent;
+
+
+
             let queryString = JSON.stringify({
                 type: "CHAT",
                 userName: userName,
@@ -60,18 +77,52 @@
             });
             console.log("query send is:" + queryString);
             socket.send(queryString);
+
+            document.getElementById("chatMessage").value = "";
             return false;
         }
 
         function parseData(data) {
             console.log(data);
-            switch (data.type) {
+            let msg = JSON.parse(data);
+            console.log(msg.type);
+
+            switch (msg.type) {
                 case "CHAT":
-                    let userName = data.username;
-                    let content = data.content;
-                    console.log("User name is " + userName);
-                    console.log("Content is "+ content);
-                     // TODO display here
+                    console.log("CHAT HERE ");
+
+                    let fromUser = msg.username;
+                    if(fromUser != userName){
+                        let content = msg.content;
+                        console.log("User name is " + fromUser);
+                        console.log("Content is "+ content);
+                        // TODO display here
+                        console.log("What is happending? --- ");
+                        var cdate = new Date();
+                        var newContent = "";
+                        newContent += '<div class="incoming_msg">';
+                        newContent += '<div class="incoming_msg_img">';
+                        newContent += fromUser;
+                        newContent += '</div>';
+                        newContent += '<div class="received_msg">';
+                        newContent += '<div class="received_withd_msg">';
+
+                        newContent += '<p>';
+                        newContent += content;
+                        newContent += '</p>';
+                        newContent += '<span class="time_date">';
+                        newContent += cdate.toLocaleTimeString();
+                        newContent += '</span>';
+                        newContent += '</div></div>';
+                        console.log(newContent);
+                        var originalContent = document.getElementById("msgHistory").innerHTML;
+                        originalContent += newContent;
+                        document.getElementById("msgHistory").innerHTML = originalContent;
+
+                    }
+
+
+
                     break;
                 case "ADD_LOCATION":
                     let dest = data.destination;
@@ -209,53 +260,16 @@
                 <div class="inbox_msg">
 
                     <div class="mesgs">
-                        <div class="msg_history">
-                            <div class="incoming_msg">
-                                <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                                <div class="received_msg">
-                                    <div class="received_withd_msg">
-                                        <p>Test which is a new approach to have all
-                                            solutions</p>
-                                        <span class="time_date"> 11:01 AM    |    June 9</span></div>
-                                </div>
-                            </div>
-                            <div class="outgoing_msg">
-                                <div class="sent_msg">
-                                    <p>Test which is a new approach to have all
-                                        solutions</p>
-                                    <span class="time_date"> 11:01 AM    |    June 9</span> </div>
-                            </div>
-                            <div class="incoming_msg">
-                                <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                                <div class="received_msg">
-                                    <div class="received_withd_msg">
-                                        <p>Test, which is a new approach to have</p>
-                                        <span class="time_date"> 11:01 AM    |    Yesterday</span></div>
-                                </div>
-                            </div>
-                            <div class="outgoing_msg">
-                                <div class="sent_msg">
-                                    <p>Apollo University, Delhi, India Test</p>
-                                    <span class="time_date"> 11:01 AM    |    Today</span> </div>
-                            </div>
-                            <div class="incoming_msg">
-                                <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                                <div class="received_msg">
-                                    <div class="received_withd_msg">
-                                        <p>We work directly with our designers and suppliers,
-                                            and sell direct to you, which means quality, exclusive
-                                            products, at a price anyone can afford.</p>
-                                        <span class="time_date"> 11:01 AM    |    Today</span></div>
-                                </div>
-                            </div>
+                        <div class="msg_history" id ="msgHistory">
+
                         </div>
                         <div class="type_msg">
-                            <div class="input_msg_write">
+                            <form class="input_msg_write">
 
-                                <input type="text" class="write_msg" id = "chatMessage" placeholder="Type a message" />
+                                <input type="text" class="write_msg" id = "chatMessage" placeholder="Type a message"/>
 
                                 <button class="msg_send_btn" type="button" onclick="sendMessage()"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -273,5 +287,7 @@
 <script src="./js/trip.js"></script>
 
 <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+
+
 </body>
 </html>
