@@ -7,13 +7,13 @@ public class Query {
     String tripName;
     String userName;
     String content;
+    FlightQuery flightQuery;
 }
 
 class FlightQuery {
     String origin;
     String dest;
     String startMonth;
-    String endMonth;
     int price;
 }
 
