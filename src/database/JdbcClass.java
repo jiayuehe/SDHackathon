@@ -17,7 +17,7 @@ public class JdbcClass {
     private static ResultSet rs = null;
     private static PreparedStatement ps = null;
     private static String driverName = "com.mysql.jdbc.Driver";
-    private static String password = "WangXueYuan123";
+    private static String password = "Angela97@";
     public static void connect(){
         try {
             Class.forName(driverName);
@@ -341,7 +341,7 @@ public class JdbcClass {
     public static void save(String trip_id, String result) {
         connect();
         try {
-            String query = "INSERT INTO User_to_Trip(trip_id, result) VALUES(?, ?)";
+            String query = "INSERT INTO Trip_to_Result(trip_id, result) VALUES(?, ?)";
             ps = conn.prepareStatement(query);
             ps.setString(1, trip_id);
             ps.setString(2, result);

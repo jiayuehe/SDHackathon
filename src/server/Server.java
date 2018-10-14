@@ -18,7 +18,7 @@ public class Server extends WebSocketServer {
 
     private Set<WebSocket> conns;
 
-    private Map<String,Set<String>> teamToLocationsName = new HashMap<>();
+    private Map<String, Set<String>> teamToLocationsName = new HashMap<>();
 
     private Map<String, Set<WebSocket>> teamMap = new HashMap<>();
 
@@ -36,8 +36,7 @@ public class Server extends WebSocketServer {
     public void joinTeam(WebSocket conn, String name) {
         if (teamMap.containsKey(name)) {
             teamMap.get(name).add(conn);
-        }
-        else {
+        } else {
             Set<WebSocket> socketSet = new HashSet<>();
             teamMap.put(name, socketSet);
         }
@@ -68,7 +67,7 @@ public class Server extends WebSocketServer {
                 System.out.println(teamMap);
                 break;
             case "CHAT":
-                teamBroadcast(teamName,"{\"type\": \"CHAT\", \"username\" : \"" + username +
+                teamBroadcast(teamName, "{\"type\": \"CHAT\", \"username\" : \"" + username +
                         "\", \"content\": \"" + query.content + "\"}");
                 break;
             case "JOIN_TEAM":
@@ -84,7 +83,7 @@ public class Server extends WebSocketServer {
                 teamToLocationsName.get(teamName).add(destination);
                 teamToLocationsName.get(teamName).add(origin);
                 teamBroadcast(teamName, "{\"type\": \"ADD_LOCATION\", \"origin\": \"" + origin + "\"," +
-                                                    " \"destination\" : \"" + destination + "\"}");
+                        " \"destination\" : \"" + destination + "\"}");
                 break;
 
             case "CALCULATE":
@@ -109,20 +108,21 @@ public class Server extends WebSocketServer {
                 List<Location> allLocationPerTeam = new ArrayList<>(locations);
                 List<Location> finalSolution = TravelSalesMan.processCommand(allLocationPerTeam);
                 StringBuilder sb = new StringBuilder();
-                for(Location solution:finalSolution){
+                for (Location solution : finalSolution) {
                     System.out.print(solution.getName() + ",");
                     sb.append(solution.getName()).append(",");
                 }
                 String resultString = sb.toString();
-                int sum = calculatePrize(finalSolution.get(0),finalSolution);
+                int sum = calculatePrize( finalSolution);
 
                 List<String> solution = new ArrayList<>();
                 for (Location loc : finalSolution) {
                     solution.add(loc.getName());
                 }
-                Result result = new Result("RESULT",solution,sum);
+                Result result = new Result("RESULT", solution, sum);
+                System.out.println("Currently total sum is " + sum);
                 String json = gson.toJson(result);
-                teamBroadcast(teamName,json);
+                teamBroadcast(teamName, json);
 
                 // Save to database
                 JdbcClass.save(teamName, resultString);
@@ -130,13 +130,21 @@ public class Server extends WebSocketServer {
 
     }
 
-    private int calculatePrize(Location startPosition, List<Location> finalSolution){
+    private int calculatePrize( List<Location> finalSolution) {
         int sum = 0;
-        for(int i = 1; i < finalSolution.size(); i++){
-            Location toLocation = finalSolution.get(i);
-            sum += startPosition.getPriceMap().getOrDefault(toLocation,10000);
-            startPosition = toLocation;
+        int from = 0;
+        int to = 1;
+        for (; from < finalSolution.size() - 2; from++, to++) {
+            Map<String, Integer> currentPriceMap = finalSolution.get(from).getPriceMap();
+            sum += currentPriceMap.getOrDefault(finalSolution.get(to).getName(), 10000);
+            System.out.println("Current Sum  is " + sum);
         }
+        /*
+        from = to;
+        Map<String, Integer> currentPriceMap = finalSolution.get(from).getPriceMap();
+        sum += currentPriceMap.getOrDefault(finalSolution.get(0).getName(), 10000);
+        System.out.println("Current Sum  is " + sum);
+        */
         return sum;
     }
 
