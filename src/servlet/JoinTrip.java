@@ -20,11 +20,15 @@ public class JoinTrip extends HttpServlet {
         }
 
         if (result) {
-            getServletContext().getRequestDispatcher("/tripRegister.jsp").forward(request, response);
+            System.out.println("The name exists, we should join trip");
+            getServletContext().getRequestDispatcher("/create.jsp").forward(request, response);
+        } else{
+            System.out.println("Error");
+            RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/tripRegister.jsp");
+            request.getSession().setAttribute("tripName", tripName);
+            dispatch.forward(request, response);
         }
-        RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/home.jsp");
-        request.getSession().setAttribute("tripName", tripName);
-        dispatch.forward(request, response);
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

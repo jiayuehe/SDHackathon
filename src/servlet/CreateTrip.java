@@ -18,15 +18,19 @@ public class CreateTrip extends HttpServlet {
         if (JdbcClass.checkIfTripNameExist(tripName)) {
            result = false;
         } else {
+            System.out.println("The name does not exist");
             JdbcClass.createTrip(tripName,"North America");
         }
 
         if (result) {
             getServletContext().getRequestDispatcher("/tripRegister.jsp").forward(request, response);
+        } else{
+            System.out.println("We should be here");
+            RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/home.jsp");
+            request.getSession().setAttribute("tripName", tripName);
+            dispatch.forward(request, response);
         }
-        RequestDispatcher dispatch = getServletContext().getRequestDispatcher("/home.jsp");
-        request.getSession().setAttribute("tripName", tripName);
-        dispatch.forward(request, response);
+
 
     }
 

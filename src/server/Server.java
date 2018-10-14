@@ -108,9 +108,12 @@ public class Server extends WebSocketServer {
 
                 List<Location> allLocationPerTeam = new ArrayList<>(locations);
                 List<Location> finalSolution = TravelSalesMan.processCommand(allLocationPerTeam);
+                StringBuilder sb = new StringBuilder();
                 for(Location solution:finalSolution){
                     System.out.print(solution.getName() + ",");
+                    sb.append(solution.getName()).append(",");
                 }
+                String resultString = sb.toString();
                 int sum = calculatePrize(finalSolution.get(0),finalSolution);
 
                 List<String> solution = new ArrayList<>();
@@ -122,7 +125,7 @@ public class Server extends WebSocketServer {
                 teamBroadcast(teamName,json);
 
                 // Save to database
-                JdbcClass.save()
+                JdbcClass.save(teamName, resultString);
         }
 
     }
@@ -167,6 +170,11 @@ public class Server extends WebSocketServer {
             // do some thing if required
         } */
         System.out.println("ERROR from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+    }
+
+    @Override
+    public void onStart() {
+
     }
 
     public static void main(String[] args) {
