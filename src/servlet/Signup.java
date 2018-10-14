@@ -41,7 +41,7 @@ public class Signup extends javax.servlet.http.HttpServlet{
                 JdbcClass.registerUser(username, password);
                 User currentuser = JdbcClass.getUser(username);
                 request.getSession().setAttribute("currentuser", currentuser);
-                response.sendRedirect("/create.jsp");
+                response.sendRedirect("/profile.jsp");
                 return;
             }else {
                 // If flag is -1, that means there were errors

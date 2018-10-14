@@ -4,27 +4,36 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Location {
-    String currentLoc;
+    String name;
     double lon;
     double lat;
-    Map<String, Integer> mapOfLocation;
+
+    public Map<String, Integer> getPriceMap() {
+        return priceMap;
+    }
+
+    private Map<String, Integer> priceMap;
+
+    public Location(String name) {
+        this.name = name;
+    }
 
     public Location(double longitude, double latitude, String name){
         lon = longitude;
         lat = latitude;
-        currentLoc = name;
+        this.name = name;
     }
 
-    public String getCurrentLoc() {
-        return currentLoc;
+    public String getName() {
+        return name;
     }
 
     public void addLocation(Location k, int price){
-        if(mapOfLocation == null){
-            mapOfLocation = new HashMap<>();
+        if(priceMap == null){
+            priceMap = new HashMap<>();
         }
 
-        mapOfLocation.put(k.currentLoc,price);
+        priceMap.put(k.name,price);
     }
 
 

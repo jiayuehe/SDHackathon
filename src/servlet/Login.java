@@ -46,7 +46,7 @@ public class Login extends HttpServlet {
             if(flag == 1){
                 User currentuser = JdbcClass.getUser(username);
                 request.getSession().setAttribute("currentuser", currentuser);
-                response.sendRedirect("/create.jsp");
+                response.sendRedirect("/profile.jsp");
                 return;
             } else {
                 // If flag is not 1, that means there were errors
