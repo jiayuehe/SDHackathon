@@ -54,21 +54,32 @@
 	        <!-- <a class="navbar-brand" href="./home.jsp">Tripi</a> -->
 	        <a href = "home.jsp"><img class="nav-img" src="./img/logo-nav.png" alt="" width="auto" height="300"></a>
 
+			  <ul class="navbar-nav ml-auto">
+				  <%
+					  if (request.getSession().getAttribute("user_id") == null) {
+				  %>
+				  <li class="nav-item">
+					  <a class="nav-link" href="./login.jsp">Log In</a>
+				  </li>
+				  <li class="nav-item">
+					  <a class="nav-link" href="./signup.jsp">Sign Up</a>
+				  </li>
+				  <li class="nav-item">
+					  <a class="nav-link" href="./login.jsp">Create Trip</a>
+				  </li>
+				  <% } else {  %>
+				  <li class="nav-item">
+					  <a class="nav-link" href="./tripRegister.jsp">Hello <%= request.getSession().getAttribute("displayname") %></a>
+				  </li>
 
-	        <ul class="navbar-nav ml-auto">
-	        	
-	        	  <li class="nav-item">
-	        	  	<a class="nav-link" href="./login.jsp">Log In</a>
-	        	  </li>
-	              <li class="nav-item">
-	              	<a class="nav-link" href="./signup.jsp">Sign Up</a>
-	              </li>
-	              <li class="nav-item">
-	              	<a class="nav-link" href="./login.jsp">Create Trip</a>
-	              </li>
-	          
+				  <li class="nav-item">
+					  <a class="nav-link" href="./logout.jsp">Logout</a>
+				  </li>
 
-	        </ul>
+
+				  <% } %>
+
+			  </ul>
 		  </div>
     	</nav>
 

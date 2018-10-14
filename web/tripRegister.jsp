@@ -13,17 +13,46 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 <title>Trip Selection</title>
+    <style>
+        body{
+            width: 100%;
+            height: 100%;
+            background-image: url("img/auth-bg.jpg");
+            background-size: cover;
+        }
+
+        .container{
+            margin-top: 100px;
+            width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: rgb(255,255,255);
+            padding: 20px;
+        }
+
+
+        .form-request-help{
+            margin-top: 50px;
+            padding: 10px;
+            width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
  <div class="container">
 
       <form class="form-request-help" method="POST" action="CreateTrip">
         <h2 class="form-request-help-heading text-center">Planning Trips</h2>
+          <br/>
           <h4 class="form-request-help-heading text-left">Create a new trip:</h4>
         <label for="tripHandle" class="sr-only">New Group Name </label>
         <input id = "tripName" .type="text" name="tripHandle" class="form-control" placeholder="trojanTrip" required autofocus>
         <input type="hidden" name="command" value="creaettripHandle" >
-        <button class="btn btn-lg btn-primary btn-block" type="submit">submit</button>
+          <br/>
+          <input type="submit" class="btn btn-outline-success my-5 my-sm-0" value="Submit"/>
 
      </form>
    
@@ -33,7 +62,8 @@
         <label for="tripHandle" class="sr-only"> Join Trip Name </label>
         <input type="text" name="tripHandle" class="form-control" placeholder="tommyTrip" required autofocus>
         <input type="hidden" name= "command" value="jointripHandle">
-        <button class="btn btn-lg btn-primary btn-block" type="submit">submit</button>
+        <br/>
+        <input type="submit" class="btn btn-outline-success my-5 my-sm-0" value="Submit"/>
     </form>
       
       

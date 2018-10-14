@@ -68,8 +68,8 @@ public class Server extends WebSocketServer {
                 System.out.println(teamMap);
                 break;
             case "CHAT":
-                teamBroadcast(teamName,"{'type': 'CHAT', 'username' :" + username +
-                        ", 'content':" + query.content + "}");
+                teamBroadcast(teamName,"{\"type\": \"CHAT\", \"username\" : \"" + username +
+                        "\", \"content\": \"" + query.content + "\"}");
                 break;
             case "JOIN_TEAM":
                 joinTeam(conn, teamName);
@@ -83,8 +83,8 @@ public class Server extends WebSocketServer {
                 teamToLocationsName.computeIfAbsent(teamName, k -> new HashSet<>());
                 teamToLocationsName.get(teamName).add(destination);
                 teamToLocationsName.get(teamName).add(origin);
-                teamBroadcast(teamName, "{'type': 'ADD_LOCATION', 'origin':" + origin + "," +
-                                                    " 'destination' :" + destination + "}");
+                teamBroadcast(teamName, "{\"type\": \"ADD_LOCATION\", \"origin\": \"" + origin + "\"," +
+                                                    " \"destination\" : \"" + destination + "\"}");
                 break;
 
             case "CALCULATE":
